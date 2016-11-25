@@ -18,22 +18,53 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <parent>
+    <!--parent>
         <artifactId>storm</artifactId>
         <groupId>org.apache.storm</groupId>
         <version>2.0.0-SNAPSHOT</version>
         <relativePath>../../pom.xml</relativePath>
-    </parent>
+    </parent-->
 
     <packaging>jar</packaging>
+    <groupId>com.hubrick.storm</groupId>
     <artifactId>storm-kafka</artifactId>
     <name>storm-kafka</name>
+    <version>2.0.0-SNAPSHOT</version>
     <description>Storm Spouts for Apache Kafka</description>
 
+    <properties>
+        <java.version>1.7</java.version>
+      
+        <curator.version>2.10.0</curator.version>
+        <storm.kafka.version>0.10.1.0</storm.kafka.version>
+        <storm.kafka.artifact.id>kafka_2.10</storm.kafka.artifact.id>
+        <commons-io.version>2.5</commons-io.version>
+        <commons-lang.version>2.5</commons-lang.version>
+        <json-simple.version>1.1</json-simple.version>
+	<junit.version>4.12</junit.version>
+	<slf4j.version>1.7.21</slf4j.version>	
+	
+        <!--Plugin versions-->
+	<maven.compiler.plugin.version>3.1</maven.compiler.plugin.version>
+	<maven.source.plugin.version>2.4</maven.source.plugin.version>
+	<maven.javadoc.plugin.version>2.10.4</maven.javadoc.plugin.version>
+	
+	
+    </properties>
+    
     <build>
-        <plugins>
-            <plugin>
-                <groupId>org.jacoco</groupId>
+      <plugins>
+	<plugin>
+	  <groupId>org.apache.maven.plugins</groupId>
+	  <artifactId>maven-compiler-plugin</artifactId>
+	  <version>${maven.compiler.plugin.version}</version>
+	  <configuration>
+	    <source>${java.version}</source>
+	    <target>${java.version}</target>
+	  </configuration>
+	</plugin>
+        <plugin>
+          <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.7.2.201409121644</version>
                 <executions>
@@ -60,6 +91,7 @@
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
+            <version>${commons-io.version}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -116,6 +148,17 @@
             <artifactId>${storm.kafka.artifact.id}</artifactId>
             <version>${storm.kafka.version}</version>
             <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>log4j</groupId>
+                    <artifactId>log4j</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-log4j12</artifactId>
+                </exclusion>
+            </exclusions>
+
         </dependency>
         <dependency>
             <groupId>org.apache.kafka</groupId>
@@ -125,16 +168,36 @@
         <dependency>
             <groupId>org.apache.storm</groupId>
             <artifactId>storm-core</artifactId>
-            <version>${project.version}</version>
+            <version>1.0.2</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>
+	    <version>${commons-lang.version}</version>
         </dependency>
         <dependency>
             <groupId>com.googlecode.json-simple</groupId>
             <artifactId>json-simple</artifactId>
+            <version>${json-simple.version}</version>
         </dependency>
+
+        <dependency>
+	  <groupId>org.slf4j</groupId>
+	  <artifactId>slf4j-api</artifactId>
+	  <version>${slf4j.version}</version>
+	</dependency>
+
+	
+	
+	<dependency>
+	  <groupId>junit</groupId>
+	  <artifactId>junit</artifactId>
+	  <version>${junit.version}</version>
+	  <scope>test</scope>
+	</dependency>
+
+	
+
     </dependencies>
 </project>
