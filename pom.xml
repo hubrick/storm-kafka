@@ -35,14 +35,14 @@
     <properties>
         <java.version>1.7</java.version>
       
-        <curator.version>2.10.0</curator.version>
-        <storm.kafka.version>0.10.1.0</storm.kafka.version>
+        <curator.version>2.12.0</curator.version>
+        <storm.kafka.version>0.10.2.1</storm.kafka.version>
         <storm.kafka.artifact.id>kafka_2.10</storm.kafka.artifact.id>
         <commons-io.version>2.5</commons-io.version>
-        <commons-lang.version>2.5</commons-lang.version>
-        <json-simple.version>1.1</json-simple.version>
+        <commons-lang.version>2.6</commons-lang.version>
+        <json-simple.version>1.1.1</json-simple.version>
 	<junit.version>4.12</junit.version>
-	<slf4j.version>1.7.21</slf4j.version>	
+	<slf4j.version>1.7.25</slf4j.version>	
 	
         <!--Plugin versions-->
 	<maven.compiler.plugin.version>3.1</maven.compiler.plugin.version>
