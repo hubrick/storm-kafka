@@ -18,7 +18,10 @@
 package org.apache.storm.kafka.trident;
 
 import com.google.common.collect.ImmutableMap;
-
+import kafka.javaapi.consumer.SimpleConsumer;
+import kafka.javaapi.message.ByteBufferMessageSet;
+import kafka.message.Message;
+import kafka.message.MessageAndOffset;
 import org.apache.storm.Config;
 import org.apache.storm.kafka.DynamicPartitionConnections;
 import org.apache.storm.kafka.FailedFetchException;
@@ -43,11 +46,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-
-import kafka.javaapi.consumer.SimpleConsumer;
-import kafka.javaapi.message.ByteBufferMessageSet;
-import kafka.message.Message;
-import kafka.message.MessageAndOffset;
 
 public class TridentKafkaEmitter {
 
@@ -86,7 +84,7 @@ public class TridentKafkaEmitter {
         try {
             return failFastEmitNewPartitionBatch(attempt, collector, partition, lastMeta);
         } catch (FailedFetchException e) {
-            LOG.warn("Failed to fetch from partition " + partition);
+            LOG.warn("Failed to fetch from partition " + partition, e);
             if (lastMeta == null) {
                 return null;
             } else {
