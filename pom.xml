@@ -18,13 +18,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <!--parent>
-        <artifactId>storm</artifactId>
-        <groupId>org.apache.storm</groupId>
-        <version>2.0.0-SNAPSHOT</version>
-        <relativePath>../../pom.xml</relativePath>
-    </parent-->
-
+    <parent>
+      <groupId>org.sonatype.oss</groupId>
+      <artifactId>oss-parent</artifactId>
+      <version>7</version>
+    </parent>
+    
     <packaging>jar</packaging>
     <groupId>com.hubrick.storm</groupId>
     <artifactId>storm-kafka</artifactId>
@@ -48,9 +47,22 @@
 	<maven.compiler.plugin.version>3.1</maven.compiler.plugin.version>
 	<maven.source.plugin.version>2.4</maven.source.plugin.version>
 	<maven.javadoc.plugin.version>2.10.4</maven.javadoc.plugin.version>
-	
-	
     </properties>
+
+    <developers>
+      <developer>
+	<id>1</id>
+	<name>Marcus Thiesen</name>
+	<email>oss@hubrick.com</email>
+      </developer>
+    </developers>
+
+    <scm>
+      <connection>scm:git:https://github.com/hubrick/${project.artifactId}.git</connection>
+      <developerConnection>scm:git:ssh://git@github.com/hubrick/${project.artifactId}.git</developerConnection>
+      <url>https://github.com/hubrick/${project.artifactId}</url>
+      <tag>HEAD</tag>
+    </scm>
     
     <build>
       <plugins>
@@ -83,7 +95,43 @@
                     </execution>
                 </executions>
             </plugin>
-        </plugins>
+	    <plugin>
+	      <groupId>org.apache.maven.plugins</groupId>
+	      <artifactId>maven-gpg-plugin</artifactId>
+	      <version>1.6</version>
+	      <executions>
+		<execution>
+		  <id>sign-artifacts</id>
+		  <phase>verify</phase>
+		  <goals>
+		    <goal>sign</goal>
+		  </goals>
+		</execution>
+	      </executions>
+	    </plugin>
+	    <plugin>
+	      <groupId>org.sonatype.plugins</groupId>
+	      <artifactId>nexus-staging-maven-plugin</artifactId>
+	      <version>1.6.5</version>
+	      <extensions>true</extensions>
+	      <configuration>
+		<serverId>ossrh</serverId>
+		<nexusUrl>https://oss.sonatype.org/</nexusUrl>
+		<autoReleaseAfterClose>true</autoReleaseAfterClose>
+	      </configuration>
+	    </plugin>
+	    <plugin>
+	      <groupId>org.apache.maven.plugins</groupId>
+	      <artifactId>maven-release-plugin</artifactId>
+	      <version>2.5.2</version>
+	      <configuration>
+		<autoVersionSubmodules>true</autoVersionSubmodules>
+		<useReleaseProfile>false</useReleaseProfile>
+		<releaseProfiles>release</releaseProfiles>
+		<goals>deploy</goals>
+	      </configuration>
+	    </plugin>
+      </plugins>
         <sourceDirectory>src/jvm</sourceDirectory>
         <testSourceDirectory>src/test</testSourceDirectory>
     </build>
