@@ -76,6 +76,7 @@ public class TridentKafkaEmitter {
         Map ret = doEmitNewPartitionBatch(consumer, partition, collector, lastMeta, attempt);
         Long offset = (Long) ret.get("offset");
         Long endOffset = (Long) ret.get("nextOffset");
+        LOG.debug("failFastEmitNewPartitionBatch [transaction = {}], [ret = {}]", attempt, ret);
         _kafkaOffsetMetric.setOffsetData(partition, new PartitionManager.OffsetData(endOffset, offset));
         return ret;
     }
@@ -84,8 +85,9 @@ public class TridentKafkaEmitter {
         try {
             return failFastEmitNewPartitionBatch(attempt, collector, partition, lastMeta);
         } catch (FailedFetchException e) {
-            LOG.warn("Failed to fetch from partition " + partition, e);
+            LOG.warn("Failed to fetch from partition {} [transaction = {}]", partition, attempt, e);
             if (lastMeta == null) {
+                LOG.warn("Returning null for partition {} [transaction = {}]", partition, attempt);
                 return null;
             } else {
                 Map ret = new HashMap();
@@ -95,6 +97,8 @@ public class TridentKafkaEmitter {
                 ret.put("broker", ImmutableMap.of("host", partition.host.host, "port", partition.host.port));
                 ret.put("topic", partition.topic);
                 ret.put("topology", ImmutableMap.of("name", _topologyName, "id", _topologyInstanceId));
+
+                LOG.warn("Finished error handling: [transaction = {}], [ret = {}]", attempt, ret);
                 return ret;
             }
         }
@@ -117,7 +121,7 @@ public class TridentKafkaEmitter {
         } else {
             offset = KafkaUtils.getOffset(consumer, partition.topic, partition.partition, _config);
         }
-        LOG.debug("[transaction = {}], [OFFSET = {}]", attempt, offset);
+        LOG.debug("Computed offset: [transaction = {}], [OFFSET = {}]", attempt, offset);
 
         ByteBufferMessageSet msgs = null;
         try {
@@ -142,7 +146,7 @@ public class TridentKafkaEmitter {
         newMeta.put("broker", ImmutableMap.of("host", partition.host.host, "port", partition.host.port));
         newMeta.put("topic", partition.topic);
         newMeta.put("topology", ImmutableMap.of("name", _topologyName, "id", _topologyInstanceId));
-        LOG.debug("[transaction = {}], [newMeta = {}]", attempt, newMeta);
+        LOG.debug("Finished emitting new partition batch: [transaction = {}], [newMeta = {}]", attempt, newMeta);
         return newMeta;
     }
 
