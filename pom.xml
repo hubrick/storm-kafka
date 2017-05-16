@@ -28,7 +28,7 @@
     <groupId>com.hubrick.storm</groupId>
     <artifactId>storm-kafka</artifactId>
     <name>storm-kafka</name>
-    <version>2.1.0</version>
+    <version>2.1.1-SNAPSHOT</version>
     <description>Storm Spouts for Apache Kafka</description>
 
     <properties>
@@ -61,7 +61,7 @@
       <connection>scm:git:https://github.com/hubrick/${project.artifactId}.git</connection>
       <developerConnection>scm:git:ssh://git@github.com/hubrick/${project.artifactId}.git</developerConnection>
       <url>https://github.com/hubrick/${project.artifactId}</url>
-      <tag>storm-kafka-2.1.0</tag>
+      <tag>HEAD</tag>
     </scm>
     
     <build>
